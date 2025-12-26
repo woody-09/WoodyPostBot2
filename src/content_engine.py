@@ -81,6 +81,7 @@ class ContentEngine:
     def extract_tags(self, html_content):
         """
         숨겨진 div에서 태그를 추출하고, 본문 내의 해시태그(#Keyword)도 감지하여 라벨로 추출합니다.
+        CSS 색상 코드(예: #ffffff, #333)는 제외합니다.
         """
         tags = []
         import re
@@ -89,16 +90,25 @@ class ContentEngine:
         match = re.search(r'<div id="tags"[^>]*>(.*?)</div>', html_content, re.DOTALL)
         if match:
             tags_str = match.group(1)
-            tags.extend([t.strip() for t in tags_str.split(',')])
+            # 깔끔하게 정리하며 추가
+            for t in tags_str.split(','):
+                tag = t.strip()
+                if tag and not re.match(r'^[0-9a-fA-F]{3,6}$', tag):
+                    tags.append(tag)
 
         # 2. 본문 내 해시태그 추출 (예: #반도체 #투자)
-        # 정규표현식: #으로 시작하고 그 뒤에 문자가 이어지는 패턴
-        hashtags = re.findall(r'#(\w+)', html_content)
-        if hashtags:
-            tags.extend(hashtags)
+        # 헥사 코드 형식(#ffffff)은 제외하기 위해 앞에 공백이나 시작점이 있고 뒤에 문자가 오는 패턴 사용
+        hashtags = re.findall(r'(?:^|\s)#(\w+)', html_content)
+        for ht in hashtags:
+            # 숫자로만 이루어진 3자리 또는 6자리 (색상 코드 가능성) 제외
+            if not re.match(r'^[0-9a-fA-F]{3,6}$', ht):
+                tags.append(ht)
 
         # 중복 제거 및 빈 문자열 제거
-        return list(set([t for t in tags if t]))
+        unique_tags = list(dict.fromkeys([t for t in tags if t]))
+        
+        # Blogger API 라벨 제한 (보통 20개 내외가 안전)
+        return unique_tags[:20]
 
     def clean_html(self, html_content):
         """
