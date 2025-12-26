@@ -5,6 +5,12 @@ on:
     # 00:00 UTC (한국 시간 09:00)에 실행
     - cron: '0 0 * * *'
   workflow_dispatch: # 수동 실행 허용
+    inputs:
+      skip_delay:
+        description: '랜덤 대기 건너뛰기'
+        required: true
+        default: 'true'
+        type: boolean
 
 jobs:
   build:
@@ -25,7 +31,9 @@ jobs:
         pip install -r requirements.txt
 
     - name: 스케줄 실행 시 랜덤 대기
-      if: github.event_name == 'schedule'
+      if: |
+        github.event_name == 'schedule' || 
+        (github.event_name == 'workflow_dispatch' && github.event.inputs.skip_delay == 'false')
       run: |
         echo "스케줄 실행 감지됨. 랜덤 대기 시작..."
         # 0 ~ 3600초 (1시간) 사이의 랜덤 값 생성
@@ -42,5 +50,5 @@ jobs:
         REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
         BLOG_ID: ${{ secrets.BLOG_ID }}
       run: |
-        # 여기서 주제를 동적으로 만들 수 있습니다. 예: 파일에서 가져오기 또는 날짜 기반
-        python main.py "$(date +'%Y-%m-%d') 시장 전망"
+        # 인수를 전달하지 않으면 main.py 내부에서 AI가 주제를 추천합니다.
+        python main.py

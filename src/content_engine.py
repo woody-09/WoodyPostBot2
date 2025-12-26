@@ -1,12 +1,13 @@
 import os
 import google.generativeai as genai
+import re
 from datetime import datetime
 
 class ContentEngine:
     def __init__(self, api_key):
         genai.configure(api_key=api_key)
-        # 사용자의 요청에 따라 기본 모델을 1.5 Flash로 변경
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        # 사용 가능한 모델 목록에 따라 Flash 최신 버전으로 업데이트
+        self.model = genai.GenerativeModel('gemini-flash-latest')
 
     def recommend_topic(self):
         """
@@ -101,7 +102,10 @@ class ContentEngine:
 
     def clean_html(self, html_content):
         """
-        마크다운 코드 블록이 있다면 정리합니다.
+        마크다운 코드 블록이나 불필요한 공백을 정리합니다.
         """
-        cleaned = html_content.replace('```html', '').replace('```', '')
+        cleaned = html_content.strip()
+        # 마크다운 코드 블록 제거
+        cleaned = re.sub(r'^```html\s*', '', cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r'\s*```$', '', cleaned)
         return cleaned.strip()
