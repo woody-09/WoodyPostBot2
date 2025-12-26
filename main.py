@@ -44,7 +44,12 @@ def main():
     raw_content = content_engine.generate_content(topic)
     
     if not raw_content:
-        print("콘텐츠 생성 실패.")
+        print("\n" + "="*50)
+        print("CRITICAL ERROR: 콘텐츠 생성에 실패했습니다.")
+        print("원인: API 할당량 초과(Quota Exceeded) 또는 일시적인 네트워크 오류일 수 있습니다.")
+        print("도움말: 'gemini-1.5-flash' 모델의 경우 무료 티어 일일 제한이 있을 수 있습니다.")
+        print("해결책: 수동 실행 시 주제를 직접 전달하여 추천 API 호출을 줄이거나, 다음 날 다시 시도하세요.")
+        print("="*50 + "\n")
         sys.exit(1)
 
     cleaned_content = content_engine.clean_html(raw_content)
