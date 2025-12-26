@@ -460,4 +460,3 @@ EV/EBITDA: 20% 가중
         cleaned = re.sub(r'^```html\s*', '', cleaned, flags=re.IGNORECASE)
         cleaned = re.sub(r'\s*```$', '', cleaned)
         return cleaned.strip()
-
