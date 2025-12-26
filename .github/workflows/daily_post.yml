@@ -1,0 +1,46 @@
+name: 일일 블로그 포스팅
+
+on:
+  schedule:
+    # 00:00 UTC (한국 시간 09:00)에 실행
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 수동 실행 허용
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 코드 체크아웃
+      uses: actions/checkout@v3
+
+    - name: Python 설정
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: 의존성 설치
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: 스케줄 실행 시 랜덤 대기
+      if: github.event_name == 'schedule'
+      run: |
+        echo "스케줄 실행 감지됨. 랜덤 대기 시작..."
+        # 0 ~ 3600초 (1시간) 사이의 랜덤 값 생성
+        SLEEP_TIME=$((RANDOM % 3601))
+        echo "$SLEEP_TIME 초 동안 대기합니다."
+        sleep $SLEEP_TIME
+
+    - name: 블로그 자동화 실행
+      env:
+        # User defined secrets mapping
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+        BLOG_ID: ${{ secrets.BLOG_ID }}
+      run: |
+        # 여기서 주제를 동적으로 만들 수 있습니다. 예: 파일에서 가져오기 또는 날짜 기반
+        python main.py "$(date +'%Y-%m-%d') 시장 전망"
