@@ -111,8 +111,11 @@ class ContentEngine:
         ---
 
         **형식 요구사항**:
-        - 출력 형식: HTML (body 내용만 작성)
-        - **태그**: 맨 마지막에 <div id="tags" style="display:none">tag1, tag2, ...</div> 를 포함하세요.
+        - 출력 형식: **완전한 HTML 문서 (Full HTML Document)** 형식으로 작성하라.
+        - 필수 포함 태그: `<!DOCTYPE html>`, `<html lang="ko">`, `<head>`, `<title>`, `<style>`, `<body>`.
+        - **CSS 처리**: 위에서 정의한 '1.2 CSS 변수 체계'와 모든 디자인 관련 스타일은 `<head>` 내부의 `<style>` 태그 안에 통합하여 작성하라. 본문(body) 내에서는 가급적 인라인 스타일보다 클래스나 구조적 선택자를 활용하라.
+        - **태그**: `</body>` 태그 바로 직전에 `<div id="tags" style="display:none">tag1, tag2, ...</div>` 를 포함하세요.
+        - 모든 결과물은 브라우저에서 바로 열었을 때 완벽하게 렌더링되어야 한다.
 
         **주제**: {topic}
         **날짜**: {datetime.now().strftime('%Y-%m-%d')}
