@@ -9,10 +9,17 @@ class BloggerClient:
         self.blog_id = blog_id
         self.scopes = ['https://www.googleapis.com/auth/blogger']
         
+        # Validation
+        if not all([client_id, client_secret, refresh_token]):
+            missing = []
+            if not client_id: missing.append("CLIENT_ID")
+            if not client_secret: missing.append("CLIENT_SECRET")
+            if not refresh_token: missing.append("REFRESH_TOKEN")
+            print(f"--- [AUTH ERROR] Missing credentials: {', '.join(missing)} ---")
+
         # 토큰에서 직접 자격 증명 객체 생성
-        # 항상 리프레시 토큰이 있다고 가정하고 이를 사용하여 갱신합니다.
         self.creds = Credentials(
-            None, # 초기 액세스 토큰 없음
+            None, 
             refresh_token=refresh_token,
             token_uri="https://oauth2.googleapis.com/token",
             client_id=client_id,
@@ -21,12 +28,16 @@ class BloggerClient:
         )
 
     def get_service(self):
-        if not self.creds.valid:
-            if self.creds.expired and self.creds.refresh_token:
+        if not self.creds or not self.creds.valid:
+            if self.creds and self.creds.expired and self.creds.refresh_token:
                 try:
+                    print("--- [AUTH] Attempting to refresh access token... ---")
                     self.creds.refresh(Request())
+                    print("--- [AUTH] Token refreshed successfully. ---")
                 except Exception as e:
-                    print(f"토큰 갱신 중 오류 발생: {e}")
+                    print(f"--- [AUTH ERROR] Token refresh failed: {e} ---")
+                    print("팁: 'invalid_grant'는 주로 Refresh Token이 만료되었거나 취소되었음을 의미합니다.")
+                    print("해결책: get_token.py를 다시 실행하여 새로운 리프레시 토큰을 얻고 GitHub Secrets에 업데이트하세요.")
                     raise
         
         return build('blogger', 'v3', credentials=self.creds)
