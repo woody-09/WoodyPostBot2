@@ -48,7 +48,7 @@ def main():
         print("\n" + "="*50)
         print("CRITICAL ERROR: 콘텐츠 생성에 실패했습니다.")
         print("원인: API 할당량 초과(Quota Exceeded) 또는 일시적인 네트워크 오류일 수 있습니다.")
-        print("도움말: 'gemini-3.0-flash' 모델을 사용 중입니다. 쿼터 또는 API 키 활성화 상태를 확인해주세요.")
+        print("도움말: 'gemini-2.0-flash' 모델을 사용 중입니다. 쿼터 또는 API 키 활성화 상태를 확인해주세요.")
         print("해결책: 수동 실행 시 주제를 직접 전달하여 추천 API 호출을 줄이거나, 다음 날 다시 시도하세요.")
         print("="*50 + "\n")
         sys.exit(1)

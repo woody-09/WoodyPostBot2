@@ -6,8 +6,8 @@ from datetime import datetime
 class ContentEngine:
     def __init__(self, api_key):
         genai.configure(api_key=api_key)
-        # 사용자의 요청에 따라 gemini-3.0-flash 모델 적용
-        self.model = genai.GenerativeModel('gemini-3.0-flash')
+        # 404 오류 해결을 위해 유효한 모델명(gemini-2.0-flash)으로 수정
+        self.model = genai.GenerativeModel('gemini-2.0-flash')
 
     def recommend_topic(self):
         """
