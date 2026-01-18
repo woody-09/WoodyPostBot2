@@ -1,6 +1,6 @@
 # Gemini AI & GitHub Actions를 활용한 블로그 자동화
 
-이 프로젝트는 Gemini 1.5 Pro를 사용하여 콘텐츠를 생성하고 GitHub Actions를 사용하여 구글 블로거(Blogger)에 포스팅을 자동화합니다.
+이 프로젝트는 Gemini 3 flash를 사용하여 콘텐츠를 생성하고 GitHub Actions를 사용하여 구글 블로거(Blogger)에 포스팅을 자동화합니다.
 
 ## 전제 조건
 

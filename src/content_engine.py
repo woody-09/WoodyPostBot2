@@ -6,8 +6,8 @@ from datetime import datetime
 class ContentEngine:
     def __init__(self, api_key):
         genai.configure(api_key=api_key)
-        # 최신 Gemini 2.0 Flash 모델 사용
-        self.model = genai.GenerativeModel('gemini-2.0-flash')
+        # 최신 Gemini 3.0 Flash 모델 사용
+        self.model = genai.GenerativeModel('gemini-3.0-flash')
 
     def recommend_topic(self):
         """
