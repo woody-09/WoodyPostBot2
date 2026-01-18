@@ -36,8 +36,14 @@ class BloggerClient:
                     print("--- [AUTH] Token refreshed successfully. ---")
                 except Exception as e:
                     print(f"--- [AUTH ERROR] Token refresh failed: {e} ---")
-                    print("팁: 'invalid_grant'는 주로 Refresh Token이 만료되었거나 취소되었음을 의미합니다.")
-                    print("해결책: get_token.py를 다시 실행하여 새로운 리프레시 토큰을 얻고 GitHub Secrets에 업데이트하세요.")
+                    print("\n" + "!" * 50)
+                    print("CRITICAL: Blogger 인증에 실패했습니다 (invalid_grant).")
+                    print("원인: 리프레시 토큰이 만료되었거나 취소되었습니다.")
+                    print("해결 방법:")
+                    print("  1. 로컬에서 'python get_token.py'를 실행하여 새 토큰을 얻으세요.")
+                    print("  2. 새 토큰을 .env 파일이나 GitHub Secrets에 업데이트하세요.")
+                    print("  3. (권장) Google Cloud Console에서 'OAuth 동의 화면' -> '앱 게시'를 수행하여 7일 제한을 해제하세요.")
+                    print("!" * 50 + "\n")
                     raise
         
         return build('blogger', 'v3', credentials=self.creds)
@@ -54,6 +60,10 @@ class BloggerClient:
         
         if labels:
             body['labels'] = labels
+
+        print(f"--- [DEBUG] Blogger API 요청 데이터 구성 완료 ---")
+        print(f"--- [DEBUG] Title: {body.get('title')} ---")
+        print(f"--- [DEBUG] Content Length: {len(body.get('content', ''))} ---")
 
         try:
             posts = service.posts()

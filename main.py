@@ -1,5 +1,7 @@
 import os
 import sys
+import re
+from datetime import datetime
 from dotenv import load_dotenv
 from src.content_engine import ContentEngine
 from src.blogger_client import BloggerClient
@@ -57,15 +59,26 @@ def main():
     tags = content_engine.extract_tags(cleaned_content)
     
     # 5. 제목 추출 루틴
-    import re
-    # 우선 <h1> 태그를 찾고, 없으면 주제를 사용합니다.
+    # [우선순위 1] <h1> 태그 검색
     title_match = re.search(r'<h1[^>]*>(.*?)</h1>', cleaned_content, re.IGNORECASE | re.DOTALL)
     if title_match:
         post_title = re.sub('<[^<]+?>', '', title_match.group(1)).strip()
     else:
-        post_title = topic
+        # [우선순위 2] 마크다운 스타일의 # 제목 (있다면) 또는 첫 번째 굵은 텍스트
+        alt_title_match = re.search(r'(?:^|\n)#\s*(.*?)(?:\n|$)', cleaned_content) or \
+                          re.search(r'<strong>(.*?)</strong>', cleaned_content, re.IGNORECASE) or \
+                          re.search(r'<b>(.*?)</b>', cleaned_content, re.IGNORECASE)
+        
+        if alt_title_match:
+            post_title = re.sub('<[^<]+?>', '', alt_title_match.group(1)).strip()
+        else:
+            # [최종] 주제를 제목으로 사용
+            post_title = topic
+
     print(f"제목: {post_title}")
     print(f"태그: {tags}")
+    print(f"본문 길이: {len(cleaned_content)} 자")
+    print(f"본문 미리보기: {cleaned_content[:100]}...")
 
     # 6. Blogger에 업로드 (초안으로)
     print("Blogger에 업로드 중...")
