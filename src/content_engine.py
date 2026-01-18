@@ -8,8 +8,8 @@ class ContentEngine:
     def __init__(self, api_key):
         # google-genai SDK 사용
         self.client = genai.Client(api_key=api_key)
-        # 모델명 지정
-        self.model_id = 'gemini-2.0-flash'
+        # 사용자의 요청에 따라 gemini-2.5-flash-lite 모델 사용
+        self.model_id = 'gemini-2.5-flash-lite'
 
     def recommend_topic(self):
         """
