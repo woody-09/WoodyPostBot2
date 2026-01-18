@@ -28,4 +28,4 @@ jobs:
           BLOGGER_REFRESH_TOKEN: ${{ secrets.BLOGGER_REFRESH_TOKEN }}
           BLOG_ID: ${{ secrets.BLOG_ID }}
           BLOGGER_BLOG_ID: ${{ secrets.BLOGGER_BLOG_ID }}
-        run: python main.py "Market Outlook for $(date +'%Y-%m-%d')"
+        run: python main.py
