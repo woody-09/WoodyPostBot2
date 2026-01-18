@@ -6,8 +6,8 @@ from datetime import datetime
 class ContentEngine:
     def __init__(self, api_key):
         genai.configure(api_key=api_key)
-        # 안정적인 1.5 Flash 모델 사용 (하루 20회 제한 등 특정 쿼터 문제를 피하기 위함)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        # 최신 Gemini 2.0 Flash 모델 사용
+        self.model = genai.GenerativeModel('gemini-2.0-flash')
 
     def recommend_topic(self):
         """
