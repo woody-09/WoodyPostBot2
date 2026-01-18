@@ -67,9 +67,7 @@ class ContentEngine:
 
         ## Layer 1: Design System Foundation
         ### 1.1 디자인 철학
-        ### 🎨 기본 기조
         > "신뢰를 통한 설득" - 복잡한 금융 정보를 단순하고 명확하게 전달
-        ### 📐 디자인 3대 원칙
         1. **Minimal Complexity**: 복잡한 금융 정보를 단순하고 명확하게
         2. **Data-First but easy readable**: 가독성 좋고 긍정/부정이 한눈에 들어오게 함
         3. **Trust Through Consistency**: 일관성으로 전문성 구축
@@ -90,18 +88,12 @@ class ContentEngine:
 
         ## Layer 2: HTML Structure Framework
         ### 2.1 구조 설계 철학
-        ### 📋 구조 설계 4대 원칙
         1. **Platform Awareness**: 스킨 시스템 충돌 방지, 에디터 자동 변환 대응
-        2. **EEAT**: 작성자 푸터 포함 (작성자:우디(Woody), AI를 활용한 실전 투자자 분석가)
-
-        ### 2.2 5-Phase 템플릿 구조
-        (Phase 1: Meta Header, Phase 2: Navigation, Phase 3: Main Content, Phase 4: Compliance Footer, Phase 5: Inline Styles)
-
+        2. **EEAT**: 작성자 푸터 포함 (작성자:우디(Woody), 실전 투자 분석가)
         ---
 
         ## Layer 3: Content Generation Engine
         ### 3.1 역할 정의
-        ### 👤 페르소나
         **'Prudent Contrarian'** - 20년 경력 가치투자 애널리스트
         ### 3.2 6단계 분석 프레임워크
         - Stage 1: 기업 본질 분석 (비즈니스 모델, 점유율 등)
@@ -114,16 +106,12 @@ class ContentEngine:
         ---
 
         **형식 요구사항 (Blogger 최적화)**:
-        - **HTML 구조**: `<body>` 태그 내의 콘텐츠만 생성하지 말고, `<head>`를 포함한 **완전한 HTML5 문서** 형식으로 작성한다.
-        - **헤더 계층 (CRITICAL)**: Blogger 포스트 제목이 이미 `<h1>`이므로, 본문의 대주제는 반드시 `<h2>`, 소제목은 `<h3>` 이하를 사용한다. `<h1>`은 절대 사용하지 않는다.
+        - **HTML 구조**: `<body>` 태그 내의 콘텐츠만 작성한다.
         - **HTML5 준수**: `meta`, `br`, `hr`, `img` 태그 등은 self-closing(`/>`)을 사용하지 말고 HTML5 표준(` <meta ...> `)에 맞춰 작성하라. 모든 열린 태그는 반드시 닫아야 한다.
         - **시맨틱 태그**: `<article>`, `<section>`, `<header>`, `<footer>` 등을 적극 활용하여 구조화하라.
-        - **이미지 및 접근성**: `<img>` 태그 사용 시 반드시 구체적인 `alt` 속성을 포함하라.
         - **CSS 처리 (Inline CSS ONLY)**: 모든 스타일은 각 태그 내의 **인라인 'style' 속성**으로만 작성한다. `<head>` 내의 `<style>` 태그 사용은 절대 금지한다. 모든 스타일 선언은 개별 요소에 직접 적용되어야 한다.
         - **제약 사항**: JavaScript(` <script> `) 및 외부 iFrame 사용을 금지한다. `bgcolor`, `font`, `center` 등 구시대적(Deprecated) 태그 및 속성을 사용하지 말고 CSS를 활용하라.
-        - **태그 섹션**: `</body>` 태그 바로 직전에 `<div id="tags" style="display:none">tag1, tag2, ...</div>` 를 포함하세요.
-        - 결과물은 브라우저에서 독립된 페이지로 완벽하게 보여야 하며, 동시에 Blogger 본문에 삽입되어도 스타일이 유지되도록 설계하라.
-
+        
         **주제**: {topic}
         **날짜**: {datetime.now().strftime('%Y-%m-%d')}
         """
