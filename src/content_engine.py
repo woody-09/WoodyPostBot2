@@ -6,8 +6,8 @@ from datetime import datetime
 class ContentEngine:
     def __init__(self, api_key):
         genai.configure(api_key=api_key)
-        # 최신 Gemini 3.0 Flash 모델 사용
-        self.model = genai.GenerativeModel('gemini-3.0-flash')
+        # 고효율/저지연을 위해 gemini-1.5-flash-8b 모델 사용 (쿼터 관리 최적화)
+        self.model = genai.GenerativeModel('gemini-1.5-flash-8b')
 
     def recommend_topic(self):
         """
