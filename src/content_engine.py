@@ -8,8 +8,8 @@ class ContentEngine:
     def __init__(self, api_key):
         # google-genai SDK 사용
         self.client = genai.Client(api_key=api_key)
-        # 사용자의 요청에 따라 gemini-2.5-flash-lite 모델 사용
-        self.model_id = 'gemini-2.5-flash-lite'
+        # 호출 우선순위 모델 리스트
+        self.models = ['gemini-3-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite']
 
     def recommend_topic(self):
         """
@@ -25,21 +25,32 @@ class ContentEngine:
         
         **결과물**: 오직 **기업명(티커)** 만 출력하세요. (예: Ford Motor (F))
         """
-        try:
-            response = self.client.models.generate_content(
-                model=self.model_id,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    temperature=0.7
+        
+        for model in self.models:
+            try:
+                print(f"--- 주제 추천 시도 중: {model} ---")
+                response = self.client.models.generate_content(
+                    model=model,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        temperature=0.7
+                    )
                 )
-            )
-            if not response.text:
-                raise ValueError("Response text is empty")
-            return response.text.strip()
-        except Exception as e:
-            print(f"\n--- 주제 추천 중 오류 발생 ---")
-            print(f"Error: {e}")
-            return "NVIDIA (NVDA)"
+                if response.text:
+                    return response.text.strip()
+                else:
+                    raise ValueError("Response text is empty")
+            except Exception as e:
+                err_msg = str(e)
+                if "404" in err_msg or "429" in err_msg or "NotFound" in err_msg or "TooManyRequests" in err_msg:
+                    print(f"--- {model} 실패 (에러: {err_msg}). 다음 모델 시도 ---")
+                    continue
+                else:
+                    print(f"--- {model} 예상치 못한 오류 발생: {e} ---")
+                    break
+        
+        print("--- 모든 모델 호출 실패. 기본값 반환 ---")
+        return "NVIDIA (NVDA)"
 
     def generate_content(self, topic):
         """
@@ -116,43 +127,52 @@ class ContentEngine:
         **날짜**: {datetime.now().strftime('%Y-%m-%d')}
         """
 
-        try:
-            response = self.client.models.generate_content(
-                model=self.model_id,
-                contents=full_prompt,
-                config=types.GenerateContentConfig(
-                    temperature=0.7,
-                    safety_settings=[
-                        types.SafetySetting(
-                            category='HARM_CATEGORY_HATE_SPEECH',
-                            threshold='BLOCK_NONE'
-                        ),
-                        types.SafetySetting(
-                            category='HARM_CATEGORY_HARASSMENT',
-                            threshold='BLOCK_NONE'
-                        ),
-                        types.SafetySetting(
-                            category='HARM_CATEGORY_SEXUALLY_EXPLICIT',
-                            threshold='BLOCK_NONE'
-                        ),
-                        types.SafetySetting(
-                            category='HARM_CATEGORY_DANGEROUS_CONTENT',
-                            threshold='BLOCK_NONE'
-                        ),
-                    ]
+        for model in self.models:
+            try:
+                print(f"--- 콘텐츠 생성 시도 중: {model} ---")
+                response = self.client.models.generate_content(
+                    model=model,
+                    contents=full_prompt,
+                    config=types.GenerateContentConfig(
+                        temperature=0.7,
+                        safety_settings=[
+                            types.SafetySetting(
+                                category='HARM_CATEGORY_HATE_SPEECH',
+                                threshold='BLOCK_NONE'
+                            ),
+                            types.SafetySetting(
+                                category='HARM_CATEGORY_HARASSMENT',
+                                threshold='BLOCK_NONE'
+                            ),
+                            types.SafetySetting(
+                                category='HARM_CATEGORY_SEXUALLY_EXPLICIT',
+                                threshold='BLOCK_NONE'
+                            ),
+                            types.SafetySetting(
+                                category='HARM_CATEGORY_DANGEROUS_CONTENT',
+                                threshold='BLOCK_NONE'
+                            ),
+                        ]
+                    )
                 )
-            )
-            
-            if not response.text:
-                if response.candidates:
-                    print(f"--- [DEBUG] Finish Reason: {response.candidates[0].finish_reason} ---")
-                return None
                 
-            return response.text
-        except Exception as e:
-            print(f"\n--- 콘텐츠 생성 중 오류 발생 ---")
-            print(f"Error: {e}")
-            return None
+                if not response.text:
+                    if response.candidates:
+                        print(f"--- [DEBUG] Finish Reason: {response.candidates[0].finish_reason} ---")
+                    raise ValueError("Response text is empty")
+                    
+                return response.text
+            except Exception as e:
+                err_msg = str(e)
+                if "404" in err_msg or "429" in err_msg or "NotFound" in err_msg or "TooManyRequests" in err_msg:
+                    print(f"--- {model} 실패 (에러: {err_msg}). 다음 모델 시도 ---")
+                    continue
+                else:
+                    print(f"--- {model} 예상치 못한 오류 발생: {e} ---")
+                    break
+        
+        print("--- 모든 모델 호출 실패 ---")
+        return None
 
     def extract_tags(self, html_content):
         """
