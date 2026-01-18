@@ -9,21 +9,22 @@ load_dotenv()
 
 def main():
     # 1. 구성 확인
-    gemini_key = os.getenv("GEMINI_API_KEY")
-    client_id = os.getenv("CLIENT_ID")
-    client_secret = os.getenv("CLIENT_SECRET")
-    refresh_token = os.getenv("REFRESH_TOKEN")
-    blog_id = os.getenv("BLOG_ID")
+    # Standardize environment variable names
+    gemini_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    client_id = os.getenv("CLIENT_ID") or os.getenv("BLOGGER_CLIENT_ID")
+    client_secret = os.getenv("CLIENT_SECRET") or os.getenv("BLOGGER_CLIENT_SECRET")
+    refresh_token = os.getenv("REFRESH_TOKEN") or os.getenv("BLOGGER_REFRESH_TOKEN")
+    blog_id = os.getenv("BLOG_ID") or os.getenv("BLOGGER_BLOG_ID")
 
     if not all([gemini_key, client_id, client_secret, refresh_token, blog_id]):
         print("환경 변수가 누락되었습니다. .env 파일이나 GitHub Secrets를 확인해주세요.")
         # 디버깅을 위해 어떤 키가 누락되었는지 출력 (보안을 위해 값은 출력하지 않음)
         missing = []
-        if not gemini_key: missing.append("GEMINI_API_KEY")
-        if not client_id: missing.append("CLIENT_ID")
-        if not client_secret: missing.append("CLIENT_SECRET")
-        if not refresh_token: missing.append("REFRESH_TOKEN")
-        if not blog_id: missing.append("BLOG_ID")
+        if not gemini_key: missing.append("GEMINI_API_KEY/GOOGLE_API_KEY")
+        if not client_id: missing.append("CLIENT_ID/BLOGGER_CLIENT_ID")
+        if not client_secret: missing.append("CLIENT_SECRET/BLOGGER_CLIENT_SECRET")
+        if not refresh_token: missing.append("REFRESH_TOKEN/BLOGGER_REFRESH_TOKEN")
+        if not blog_id: missing.append("BLOG_ID/BLOGGER_BLOG_ID")
         print(f"누락된 키: {', '.join(missing)}")
         sys.exit(1)
 

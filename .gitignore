@@ -36,3 +36,8 @@ venv.bak/
 
 # Logs
 *.log
+
+# Local Setup & Secrets
+ClientAccount.txt
+client_secrets.json
+get_token.py
