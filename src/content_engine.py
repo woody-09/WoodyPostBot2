@@ -110,11 +110,15 @@ class ContentEngine:
 
         ---
 
-        **형식 요구사항**:
-        - 출력 형식: **완전한 HTML5 문서 (Full HTML5 Document)** 형식으로 작성하라.
-        - **HTML5 준수**: `meta`, `br`, `hr`, `img` 태그 등은 self-closing(`/>` 또는 `</meta>`)을 사용하지 말고 HTML5 표준(` <meta ...> `)에 맞춰 작성하라.
-        - **CSS 처리**: 모든 스타일은 `<head>` 내의 `<style>` 태그에 모아서 작성하고, 본문은 가독성이 좋은 시각적 구조(container, section 등)를 갖춰야 한다.
-        - **태그**: `</body>` 태그 바로 직전에 `<div id="tags" style="display:none">tag1, tag2, ...</div>` 를 포함하세요.
+        **형식 요구사항 (Blogger 최적화)**:
+        - **HTML 구조**: `<body>` 태그 내의 콘텐츠만 생성하지 말고, `<head>`를 포함한 **완전한 HTML5 문서** 형식으로 작성한다.
+        - **헤더 계층 (CRITICAL)**: Blogger 포스트 제목이 이미 `<h1>`이므로, 본문의 대주제는 반드시 `<h2>`, 소제목은 `<h3>` 이하를 사용한다. `<h1>`은 절대 사용하지 않는다.
+        - **HTML5 준수**: `meta`, `br`, `hr`, `img` 태그 등은 self-closing(`/>`)을 사용하지 말고 HTML5 표준(` <meta ...> `)에 맞춰 작성하라. 모든 열린 태그는 반드시 닫아야 한다.
+        - **시맨틱 태그**: `<article>`, `<section>`, `<header>`, `<footer>` 등을 적극 활용하여 구조화하라.
+        - **이미지 및 접근성**: `<img>` 태그 사용 시 반드시 구체적인 `alt` 속성을 포함하라.
+        - **CSS 처리**: 모든 스타일은 `<head>` 내의 `<style>` 태그에 모아서 작성한다. 본문 내 인라인 스타일은 최소화하되, 레이아웃 유지를 위해 필요한 경우에만 사용한다.
+        - **제약 사항**: JavaScript(` <script> `) 및 외부 iFrame 사용을 금지한다. `bgcolor`, `font`, `center` 등 구시대적(Deprecated) 태그 및 속성을 사용하지 말고 CSS를 활용하라.
+        - **태그 섹션**: `</body>` 태그 바로 직전에 `<div id="tags" style="display:none">tag1, tag2, ...</div>` 를 포함하세요.
         - 결과물은 브라우저에서 독립된 페이지로 완벽하게 보여야 하며, 동시에 Blogger 본문에 삽입되어도 스타일이 유지되도록 설계하라.
 
         **주제**: {topic}
