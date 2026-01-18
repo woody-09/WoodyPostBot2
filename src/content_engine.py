@@ -6,8 +6,8 @@ from datetime import datetime
 class ContentEngine:
     def __init__(self, api_key):
         genai.configure(api_key=api_key)
-        # 고효율/저지연을 위해 gemini-1.5-flash-8b 모델 사용 (쿼터 관리 최적화)
-        self.model = genai.GenerativeModel('gemini-1.5-flash-8b')
+        # 사용자의 요청에 따라 gemini-3.0-flash 모델 적용
+        self.model = genai.GenerativeModel('gemini-3.0-flash')
 
     def recommend_topic(self):
         """
@@ -32,7 +32,9 @@ class ContentEngine:
             topic = response.text.strip()
             return topic
         except Exception as e:
-            print(f"주제 추천 중 오류 발생: {e}")
+            print(f"\n--- 주제 추천 중 오류 발생 ---")
+            print(f"Error Type: {type(e).__name__}")
+            print(f"Error Details: {str(e)}")
             return "NVIDIA (NVDA)" # 오류 시 기본값
 
     def generate_content(self, topic):
@@ -215,7 +217,9 @@ class ContentEngine:
             response = self.model.generate_content(prompt)
             return response.text
         except Exception as e:
-            print(f"콘텐츠 생성 중 오류 발생: {e}")
+            print(f"\n--- 콘텐츠 생성 중 오류 발생 ---")
+            print(f"Error Type: {type(e).__name__}")
+            print(f"Error Details: {str(e)}")
             return None
 
 
