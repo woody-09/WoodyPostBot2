@@ -6,8 +6,8 @@ from datetime import datetime
 class ContentEngine:
     def __init__(self, api_key):
         genai.configure(api_key=api_key)
-        # 가장 안정적인 무료 티어 모델인 gemini-1.5-flash 사용 (2.0의 쿼터 제한 우회 시도)
-        self.model = genai.GenerativeModel('gemini-1.5-flash')
+        # 사용자의 요청에 따라 최신 gemini-3-flash-preview 모델 사용
+        self.model = genai.GenerativeModel('gemini-3-flash-preview')
         # 모델 정보 로깅 (디버깅용)
         print(f"--- 시스템 정보: {self.model.model_name} 사용 중 ---")
 
