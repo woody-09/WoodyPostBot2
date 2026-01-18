@@ -87,7 +87,7 @@ def main():
         title=post_title,
         content=cleaned_content,
         labels=tags,
-        is_draft=True # 사람이 검토할 수 있도록 초안으로 시작
+        is_draft=False # 즉시 게시
     )
 
     if result:
