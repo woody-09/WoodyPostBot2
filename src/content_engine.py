@@ -28,7 +28,10 @@ class ContentEngine:
         try:
             response = self.client.models.generate_content(
                 model=self.model_id,
-                contents=prompt
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    temperature=0.7
+                )
             )
             if not response.text:
                 raise ValueError("Response text is empty")
@@ -116,7 +119,7 @@ class ContentEngine:
         - **HTML5 준수**: `meta`, `br`, `hr`, `img` 태그 등은 self-closing(`/>`)을 사용하지 말고 HTML5 표준(` <meta ...> `)에 맞춰 작성하라. 모든 열린 태그는 반드시 닫아야 한다.
         - **시맨틱 태그**: `<article>`, `<section>`, `<header>`, `<footer>` 등을 적극 활용하여 구조화하라.
         - **이미지 및 접근성**: `<img>` 태그 사용 시 반드시 구체적인 `alt` 속성을 포함하라.
-        - **CSS 처리**: 모든 스타일은 `<head>` 내의 `<style>` 태그에 모아서 작성한다. 본문 내 인라인 스타일은 최소화하되, 레이아웃 유지를 위해 필요한 경우에만 사용한다.
+        - **CSS 처리 (Inline CSS ONLY)**: 모든 스타일은 각 태그 내의 **인라인 'style' 속성**으로만 작성한다. `<head>` 내의 `<style>` 태그 사용은 절대 금지한다. 모든 스타일 선언은 개별 요소에 직접 적용되어야 한다.
         - **제약 사항**: JavaScript(` <script> `) 및 외부 iFrame 사용을 금지한다. `bgcolor`, `font`, `center` 등 구시대적(Deprecated) 태그 및 속성을 사용하지 말고 CSS를 활용하라.
         - **태그 섹션**: `</body>` 태그 바로 직전에 `<div id="tags" style="display:none">tag1, tag2, ...</div>` 를 포함하세요.
         - 결과물은 브라우저에서 독립된 페이지로 완벽하게 보여야 하며, 동시에 Blogger 본문에 삽입되어도 스타일이 유지되도록 설계하라.
@@ -130,6 +133,7 @@ class ContentEngine:
                 model=self.model_id,
                 contents=full_prompt,
                 config=types.GenerateContentConfig(
+                    temperature=0.7,
                     safety_settings=[
                         types.SafetySetting(
                             category='HARM_CATEGORY_HATE_SPEECH',
